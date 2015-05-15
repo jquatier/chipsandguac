@@ -7,7 +7,7 @@ Node.js API for programmatically ordering from the Chipotle website. This module
 ### Usage
 
 ```javascript
-var ChipsAndGuac = require('ChipsAndGuac.js')
+var ChipsAndGuac = require('chipsandguac')
 
 // instantiate a new ChipsAndGuac object, passing in required configuration and credentials.
 var cag = new ChipsAndGuac({
