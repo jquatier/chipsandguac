@@ -20,7 +20,7 @@ var cag = new ChipsAndGuac({
 
 #### Find nearby locations (useful for getting location ID above)
 ```javascript
-cag.getNearbyLocations("97229").then(function(locations) {
+cag.getNearbyLocations("80123").then(function(locations) {
   console.log(JSON.stringify(locations));
 });
 
