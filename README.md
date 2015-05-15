@@ -4,6 +4,8 @@
 
 Node.js API for programmatically ordering from the Chipotle website. This module can be used for locating nearby Chipotle restaurants, looking up favorite and recent orders, checking available pickup times, and of course, placing orders. 
 
+[![NPM](https://nodei.co/npm/chipsandguac.png)](https://nodei.co/npm/chipsandguac/)
+
 ### Usage
 
 ```javascript
