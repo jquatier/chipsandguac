@@ -1,21 +1,21 @@
 {
-  "name": "ChipsAndGuac",
+  "name": "chipsandguac",
   "version": "1.0.0",
   "description": "Node.js API for programmatically ordering from the Chipotle website.",
-  "main": "ChipsAndGuac.js",
+  "main": "chipsandguac.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jquatier/ChipsAndGuac.git"
+    "url": "https://github.com/jquatier/chipsandguac.git"
   },
   "author": "JQ",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jquatier/ChipsAndGuac/issues"
+    "url": "https://github.com/jquatier/chipsandguac/issues"
   },
-  "homepage": "https://github.com/jquatier/ChipsAndGuac",
+  "homepage": "https://github.com/jquatier/chipsandguac",
   "dependencies": {
     "bluebird": "^2.9.25",
     "cheerio": "^0.19.0",
