@@ -46,11 +46,13 @@ ChipsAndGuac.prototype.initOrder = function() {
 };
 
 /*
-  Retrieves nearby restaurant locations using a zipcode
+  Static method to retrieve nearby restaurant locations using a zipcode
   @param {number} zipcode - US zip to find locations near.
 */
-ChipsAndGuac.prototype.getNearbyLocations = function(zip) {
-  var self = this;
+ChipsAndGuac.getNearbyLocations = function(zip) {
+  var self = {};
+  self._cookieStore = request.jar();
+  self.request = Promise.promisifyAll(request.defaults({jar: self._cookieStore, followRedirect: false}));
   return self.request.getAsync({uri: BASE_ORDER_URL})
     .spread(bodyOrError)
     .then(getActionToken)

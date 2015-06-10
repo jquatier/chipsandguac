@@ -8,21 +8,12 @@ Node.js API for programmatically ordering from the Chipotle website. This module
 
 ### Usage
 
+#### Find nearby locations (useful for getting location ID)
+Note: This method is static and must be called using the class name, instead of off an instance of the class.
 ```javascript
-var ChipsAndGuac = require('chipsandguac')
+var ChipsAndGuac = require('chipsandguac');
 
-// instantiate a new ChipsAndGuac object, passing in required configuration and credentials.
-var cag = new ChipsAndGuac({
-  email:'EMAIL_GOES_HERE', 
-  password:'PASSWORD_GOES_HERE', 
-  locationId: 'LOCATION_ID', 
-  phoneNumber:'555.555.5555' // must match user profile
-});
-```
-
-#### Find nearby locations (useful for getting location ID above)
-```javascript
-cag.getNearbyLocations("80123").then(function(locations) {
+ChipsAndGuac.getNearbyLocations("80123").then(function(locations) {
   console.log(JSON.stringify(locations));
 });
 
@@ -35,6 +26,21 @@ cag.getNearbyLocations("80123").then(function(locations) {
   { id: 390, name: '333 W. Hampden Ave.' } 
 ]
 ```
+
+#### Create a new instance of ChipsAndGuac with required configuration.
+```javascript
+var ChipsAndGuac = require('chipsandguac');
+
+// instantiate a new ChipsAndGuac object, passing in required configuration and credentials.
+var cag = new ChipsAndGuac({
+  email:'EMAIL_GOES_HERE', 
+  password:'PASSWORD_GOES_HERE', 
+  locationId: 'LOCATION_ID', 
+  phoneNumber:'555.555.5555' // must match user profile
+});
+```
+
+Note: All methods below require an instance of ChipsAndGuac. "cag" is the instance used in these examples.
 
 #### Look up recent orders (useful for getting previous order ID)
 ```javascript
