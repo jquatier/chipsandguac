@@ -32,9 +32,9 @@ ChipsAndGuac.prototype.initOrder = function() {
   } else {
     return self.getAddToOrderToken()
       .then(function(token) {
-        return self.request.postAsync({ 
-          uri: BASE_ORDER_URL + '/Order/CancelOrder', 
-          json: true, 
+        return self.request.postAsync({
+          uri: BASE_ORDER_URL + '/Order/CancelOrder',
+          json: true,
           headers: {'RequestVerificationToken':token}
         })
         .spread(bodyOrError)
@@ -55,12 +55,14 @@ ChipsAndGuac.getNearbyLocations = function(zip) {
   self.request = Promise.promisifyAll(request.defaults({jar: self._cookieStore, followRedirect: false}));
   return self.request.getAsync({uri: BASE_ORDER_URL})
     .spread(bodyOrError)
-    .then(getActionToken)
+    .then(getLocationsToken)
     .then(function(token) {
-      return self.request.postAsync({ 
-        uri: BASE_ORDER_URL, 
-        headers: {'RequestVerificationToken':token},
-        formData: {'PartialAddress': zip}
+      return self.request.postAsync({
+        uri: BASE_ORDER_URL,
+        formData: {
+          PartialAddress: zip,
+          PartialPlaceID: token
+        }
       });
     })
     .spread(bodyOrError)
@@ -96,7 +98,7 @@ ChipsAndGuac.prototype.getOrders = function() {
     .then(function(html) {
       console.log('location ' + self._locationId + ' homepage success!');
       return getOrdersFromResponse(html);
-    }); 
+    });
 };
 
 /*
@@ -136,7 +138,7 @@ ChipsAndGuac.prototype.placeCurrentOrder = function(pickupTime) {
   return self.getPlaceOrderToken()
     .then(function(token) {
       return self.verifyPhoneNumber(token)
-      .then(function() { 
+      .then(function() {
 
         var placeOrderPayload = {
           orderId: self._currentOrderId,
@@ -144,14 +146,14 @@ ChipsAndGuac.prototype.placeCurrentOrder = function(pickupTime) {
           restaurantNumber: self._locationId
         };
 
-        return self.request.postAsync({ 
-          uri: BASE_ORDER_URL + '/PlaceOrder/Index/' + self._locationId + '/' + self._currentOrderId, 
-          json: true, 
-          body: placeOrderPayload, 
+        return self.request.postAsync({
+          uri: BASE_ORDER_URL + '/PlaceOrder/Index/' + self._locationId + '/' + self._currentOrderId,
+          json: true,
+          body: placeOrderPayload,
           headers: {'RequestVerificationToken':token}
         })
         .spread(bodyOrError)
-        .then(function(body) { 
+        .then(function(body) {
           console.log('place order response', body);
           if(body.IsSuccessful) {
             console.log('order placed successfully!');
@@ -175,14 +177,14 @@ ChipsAndGuac.prototype.verifyPhoneNumber = function(token) {
     'phoneNumber': self._phoneNumber
   };
 
-  return self.request.postAsync({ 
-    uri: BASE_ORDER_URL + '/PlaceOrder/VerifyPhone', 
-    json: true, 
-    body: phonePayload, 
+  return self.request.postAsync({
+    uri: BASE_ORDER_URL + '/PlaceOrder/VerifyPhone',
+    json: true,
+    body: phonePayload,
     headers: {'RequestVerificationToken':token}
   })
   .spread(bodyOrError)
-  .then(function(body) { 
+  .then(function(body) {
     if(body.IsSuccessful) {
       console.log('phone number verified');
     } else {
@@ -211,14 +213,14 @@ ChipsAndGuac.prototype.addOrderToBag = function(orderId) {
       return self.getAddToOrderToken();
     })
     .then(function(token) {
-      return self.request.postAsync({ 
-        uri: BASE_ORDER_URL + '/Order/SaveOrderCopy', 
-        json: true, 
-        body: orderPayload, 
+      return self.request.postAsync({
+        uri: BASE_ORDER_URL + '/Order/SaveOrderCopy',
+        json: true,
+        body: orderPayload,
         headers: {'RequestVerificationToken':token}
       })
       .spread(bodyOrError)
-      .then(function(body) { 
+      .then(function(body) {
         if(body.IsSuccessful) {
           if(body.Id === 0) {
             throw new Error('error adding previous order. new order id was 0, which may mean the restaurant is closed.');
@@ -288,9 +290,9 @@ ChipsAndGuac.prototype.selectPayment = function() {
     .then(getActionToken)
     .then(function(token) {
       return self.request.postAsync({
-        uri: BASE_ORDER_URL + '/Payment/Index/' + self._locationId + '/' + self._currentOrderId, 
-        json: true, 
-        body: payInStorePayload, 
+        uri: BASE_ORDER_URL + '/Payment/Index/' + self._locationId + '/' + self._currentOrderId,
+        json: true,
+        body: payInStorePayload,
         headers: {'RequestVerificationToken':token}
       });
     })
@@ -320,10 +322,10 @@ ChipsAndGuac.prototype.reviewOrder = function() {
     var token = getActionToken(body);
     var orderReviewBody = body;
     console.log('order review success');
-    return self.request.postAsync({ 
-      uri: BASE_ORDER_URL + '/PlaceOrder/AvailablePickupTimes', 
-      json:true, 
-      body: availablePickupTimesPayload, 
+    return self.request.postAsync({
+      uri: BASE_ORDER_URL + '/PlaceOrder/AvailablePickupTimes',
+      json:true,
+      body: availablePickupTimesPayload,
       headers: {'RequestVerificationToken':token}
     })
     .spread(bodyOrError)
@@ -361,7 +363,7 @@ ChipsAndGuac.prototype.login = function() {
   if(!self._email) {
     throw new Error('unable to login, email not set.')
   }
-  
+
   console.log("logging in...");
   return self.request.getAsync({uri: BASE_ORDER_URL})
     .get(1)
@@ -385,7 +387,7 @@ ChipsAndGuac.prototype.login = function() {
 };
 
 /*
-  Helper method to check if the user is logged in. Checks the current cookie state for the 
+  Helper method to check if the user is logged in. Checks the current cookie state for the
   online ordering cookie.
 */
 ChipsAndGuac.prototype.isLoggedIn = function() {
@@ -405,7 +407,7 @@ var getOrderReviewInfo = function(reviewResponse, pickupTimesResponse) {
     pickupTimes: [],
     items: []
   };
-  
+
   //find pickup times
   for (var i=0; i < pickupTimesResponse.SelectList.length; i++) {
     order.pickupTimes.push(pickupTimesResponse.SelectList[i].Value);
@@ -437,7 +439,7 @@ var getOrdersFromResponse = function(response) {
 
   $("div.orderDetails").each(function() {
     var orderItems = [];
-    
+
     $("div.orderItem", this).each(function() {
       var item = {
         name: $("div.orderItemTitle", this).text(),
@@ -467,7 +469,15 @@ function getActionToken(response) {
 }
 
 /*
-  Simple helper to status check the response and throw an error if it was not a 200. 
+  Gets the partial place ID token from the hidden input that exists on the search locations page.
+*/
+function getLocationsToken(response) {
+  $ = cheerio.load(response);
+  return $("input[name='PartialPlaceID']").val();
+}
+
+/*
+  Simple helper to status check the response and throw an error if it was not a 200.
   If there was no error, returns the response body.
 */
 function bodyOrError(response, body) {
@@ -479,4 +489,3 @@ function bodyOrError(response, body) {
 }
 
 module.exports = ChipsAndGuac;
-
