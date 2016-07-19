@@ -2,9 +2,9 @@
 
 ![](img/chipsandguac.jpg)
 
-Node.js API for programmatically ordering from the Chipotle website. This module can be used for locating nearby Chipotle restaurants, looking up favorite and recent orders, checking available pickup times, and of course, placing orders. 
+Node.js API for programmatically ordering from the Chipotle website. This module can be used for locating nearby Chipotle restaurants, looking up favorite and recent orders, checking available pickup times, and of course, placing orders.
 
-[![NPM](https://nodei.co/npm/chipsandguac.png)](https://nodei.co/npm/chipsandguac/)
+[![npm version](https://badge.fury.io/js/chipsandguac.svg)](https://badge.fury.io/js/chipsandguac)
 
 ### Usage
 
@@ -18,12 +18,12 @@ ChipsAndGuac.getNearbyLocations("80123").then(function(locations) {
 });
 
 // output (Array)
-[ 
+[
   { id: 1430, name: '8100 W. Crestline Ave' },
   { id: 644, name: '3170 S. Wadsworth' },
   { id: 970, name: '5699 S. Broadway' },
   { id: 71, name: '12512 W. Ken Caryl Ave.' },
-  { id: 390, name: '333 W. Hampden Ave.' } 
+  { id: 390, name: '333 W. Hampden Ave.' }
 ]
 ```
 
@@ -33,9 +33,9 @@ var ChipsAndGuac = require('chipsandguac');
 
 // instantiate a new ChipsAndGuac object, passing in required configuration and credentials.
 var cag = new ChipsAndGuac({
-  email:'EMAIL_GOES_HERE', 
-  password:'PASSWORD_GOES_HERE', 
-  locationId: 'LOCATION_ID', 
+  email:'EMAIL_GOES_HERE',
+  password:'PASSWORD_GOES_HERE',
+  locationId: 'LOCATION_ID',
   phoneNumber:'555.555.5555' // must match user profile
 });
 ```
@@ -77,7 +77,6 @@ cag.submitPreviousOrderWithId(123456789, true).then(function(orderDetails) {
    [ { name: 'Your Name',
        itemName: 'Chicken Burrito Bowl',
        itemDetails: '...' }],
-  location: '8100 W Crestline Ave, Denver, CO 80123' 
+  location: '8100 W Crestline Ave, Denver, CO 80123'
 }
 ```
-
